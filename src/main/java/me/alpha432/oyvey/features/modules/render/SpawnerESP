@@ -1,6 +1,0 @@
-public ModuleManager() {
-    modules.add(new StorageESP());
-    modules.add(new AntiAntiESP());   // El que intenta saltar la protección del server
-    modules.add(new BaseFinder());    // El de /rtp y bajar a la Y 0
-    modules.add(new SpawnerLogger()); // El de Discord + AutoKick
-}

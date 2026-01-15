@@ -1,23 +1,20 @@
-package com.aetherx.client.modules.render;
+package me.ryll.oyvey.features.modules.render;
 
-import com.aetherx.client.modules.Module;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.text.Text;
+import me.ryll.oyvey.features.modules.Module;
+import net.minecraft.block.entity.*;
 
 public class StorageESP extends Module {
     public StorageESP() {
-        super("StorageESP");
+        super("StorageESP", "Resalta contenedores.", Category.RENDER, true, false, false);
     }
 
     @Override
     public void onTick() {
-        if (!isEnabled() || mc.world == null) return;
+        if (nullCheck()) return;
 
-        // Lógica para detectar cofres cercanos
         for (BlockEntity entity : mc.world.blockEntities) {
-            if (entity instanceof ChestBlockEntity) {
-                // Aquí irá el renderizado de la caja 3D más adelante
+            if (entity instanceof ChestBlockEntity || entity instanceof ShulkerBoxBlockEntity || entity instanceof BarrelBlockEntity) {
+                // El renderizado se suele manejar en el evento onRender3D de OyVey
             }
         }
     }

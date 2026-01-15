@@ -1,0 +1,59 @@
+package com.aetherx.client.modules.render;
+
+import com.aetherx.client.modules.Module;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.text.Text;
+import java.util.Arrays;
+import java.util.List;
+
+public class FarmFinder extends Module {
+    
+    // AQUÍ ELIGES QUÉ BUSCAR: Añade o quita bloques de esta lista
+    private final List<Block> targetCrops = Arrays.asList(
+        Blocks.NETHER_WART, 
+        Blocks.WHEAT, 
+        Blocks.CARROTS, 
+        Blocks.POTATOES,
+        Blocks.SUGAR_CANE,
+        Blocks.MELON,
+        Blocks.PUMPKIN
+    );
+
+    private final int RADIUS = 32; // Radio de búsqueda (32 bloques a la redonda)
+
+    public FarmFinder() {
+        super("FarmFinder");
+    }
+
+    @Override
+    public void onTick() {
+        if (!isEnabled() || mc.world == null || mc.player == null) return;
+
+        // Solo escaneamos cada 20 ticks (1 segundo) para no dar lag
+        if (mc.player.age % 20 != 0) return;
+
+        BlockPos playerPos = mc.player.getBlockPos();
+
+        // Escaneo en área
+        for (int x = -RADIUS; x <= RADIUS; x++) {
+            for (int y = -RADIUS; y <= RADIUS; y++) {
+                for (int z = -RADIUS; z <= RADIUS; z++) {
+                    BlockPos checkPos = playerPos.add(x, y, z);
+                    Block block = mc.world.getBlockState(checkPos).getBlock();
+
+                    if (targetCrops.contains(block)) {
+                        // Si encuentra el cultivo, te manda las coordenadas exactas
+                        // Solo avisa una vez para no inundar el chat
+                        if (mc.player.age % 100 == 0) {
+                            mc.player.sendMessage(Text.of("§6[AetherX] §e" + block.getName().getString() + " detectado en: " + checkPos.toShortString()), false);
+                        }
+                        
+                        // Aquí es donde en el futuro pondremos el renderizado de la caja (Tracer)
+                    }
+                }
+            }
+        }
+    }
+}
